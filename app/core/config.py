@@ -19,6 +19,11 @@ class Settings(BaseSettings):
 
     cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
+    secret_key: str = "cambiar-esta-clave-en-produccion"
+    admin_username: str = "admin"
+    admin_password: str = "admin"
+    session_max_age: int = 60 * 60 * 8  # 8 horas
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
