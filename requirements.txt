@@ -1,5 +1,4 @@
-fastapi
-uvicorn[standard]
+fastapi[standard]
 psycopg2-binary
 sqlalchemy
 pydantic-settings
