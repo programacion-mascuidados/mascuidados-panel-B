@@ -14,10 +14,10 @@ def verify_credentials(
     ):
         return settings.admin_username, UserRole.ADMIN
 
-    if settings.accounts_login_enabled:
-        if secrets.compare_digest(
-            username, settings.accounts_username
-        ) and secrets.compare_digest(password, settings.accounts_password):
-            return settings.accounts_username, UserRole.ACCOUNTS
+    if settings.control_cuentas_login_enabled:
+        if secrets.compare_digest(username, settings.cc_username) and secrets.compare_digest(
+            password, settings.cc_password
+        ):
+            return settings.cc_username, UserRole.ACCOUNTS
 
     return None
