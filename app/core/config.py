@@ -22,7 +22,13 @@ class Settings(BaseSettings):
     secret_key: str = "cambiar-esta-clave-en-produccion"
     admin_username: str = "admin"
     admin_password: str = "admin"
+    accounts_username: str = ""
+    accounts_password: str = ""
     session_max_age: int = 60 * 60 * 8  # 8 horas
+
+    @property
+    def accounts_login_enabled(self) -> bool:
+        return bool(self.accounts_username.strip() and self.accounts_password)
 
     @property
     def cors_origins_list(self) -> list[str]:

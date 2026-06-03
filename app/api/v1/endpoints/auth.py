@@ -1,11 +1,22 @@
-import secrets
-
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
+from app.core.authenticate import verify_credentials
 from app.core.config import Settings, get_settings
+from app.core.roles import UserRole, allowed_panels_for_role
 from app.schemas.auth import AuthStatusResponse, LoginRequest, LoginResponse
 
 router = APIRouter()
+
+
+def _session_role(request: Request) -> UserRole | None:
+    raw = request.session.get("role")
+    if not raw:
+        return None
+
+    try:
+        return UserRole(raw)
+    except ValueError:
+        return None
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -14,23 +25,29 @@ def login(
     request: Request,
     settings: Settings = Depends(get_settings),
 ) -> LoginResponse:
-    username_ok = secrets.compare_digest(
-        credentials.username, settings.admin_username
-    )
-    password_ok = secrets.compare_digest(
-        credentials.password, settings.admin_password
+    verified = verify_credentials(
+        credentials.username, credentials.password, settings
     )
 
-    if not (username_ok and password_ok):
+    if verified is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Usuario o contraseña incorrectos",
         )
 
-    request.session["authenticated"] = True
-    request.session["username"] = settings.admin_username
+    username, role = verified
+    panels = allowed_panels_for_role(role)
 
-    return LoginResponse(message="Sesión iniciada", username=settings.admin_username)
+    request.session["authenticated"] = True
+    request.session["username"] = username
+    request.session["role"] = role.value
+
+    return LoginResponse(
+        message="Sesión iniciada",
+        username=username,
+        role=role.value,
+        allowed_panels=panels,
+    )
 
 
 @router.post("/logout")
@@ -41,10 +58,17 @@ def logout(request: Request) -> dict[str, str]:
 
 @router.get("/me", response_model=AuthStatusResponse)
 def auth_status(request: Request) -> AuthStatusResponse:
-    if request.session.get("authenticated"):
-        return AuthStatusResponse(
-            authenticated=True,
-            username=request.session.get("username"),
-        )
+    if not request.session.get("authenticated"):
+        return AuthStatusResponse(authenticated=False)
 
-    return AuthStatusResponse(authenticated=False)
+    role = _session_role(request)
+    if role is None:
+        request.session.clear()
+        return AuthStatusResponse(authenticated=False)
+
+    return AuthStatusResponse(
+        authenticated=True,
+        username=request.session.get("username"),
+        role=role.value,
+        allowed_panels=allowed_panels_for_role(role),
+    )

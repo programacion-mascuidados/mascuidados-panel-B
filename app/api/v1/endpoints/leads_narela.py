@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db_session, require_auth
+from app.api.deps import get_db_session, require_leads_access
 from app.models.lead_narela import LeadNarela
 from app.schemas.lead_narela import LeadNarelaListResponse
 
-router = APIRouter(dependencies=[Depends(require_auth)])
+router = APIRouter(dependencies=[Depends(require_leads_access)])
 
 DEFAULT_LIMIT = 500
 MAX_LIMIT = 500

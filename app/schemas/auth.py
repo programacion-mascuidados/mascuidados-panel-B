@@ -9,8 +9,12 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     message: str
     username: str
+    role: str
+    allowed_panels: list[str]
 
 
 class AuthStatusResponse(BaseModel):
     authenticated: bool
     username: str | None = None
+    role: str | None = None
+    allowed_panels: list[str] = []
