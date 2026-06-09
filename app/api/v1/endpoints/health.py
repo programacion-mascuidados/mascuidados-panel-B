@@ -25,4 +25,5 @@ def health_check(
         app_name=settings.app_name,
         version=settings.app_version,
         database=db_status,
+        control_cuentas_login_configured=settings.control_cuentas_login_enabled,
     )

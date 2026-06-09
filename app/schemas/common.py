@@ -6,3 +6,4 @@ class HealthResponse(BaseModel):
     app_name: str
     version: str
     database: str
+    control_cuentas_login_configured: bool = False
