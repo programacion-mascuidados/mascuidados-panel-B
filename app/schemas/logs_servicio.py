@@ -23,6 +23,7 @@ class LogsServicioRead(BaseModel):
     asiste: str | None = None
     id_telefono: str | None = None
     telefono_prestador_2: str | None = None
+    llego_a_tiempo: str | None = None
 
 
 class LogsServicioListResponse(BaseModel):

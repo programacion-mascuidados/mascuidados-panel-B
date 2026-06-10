@@ -26,3 +26,4 @@ class LogsServicio(Base):
     asiste: Mapped[str | None] = mapped_column(String, nullable=True)
     id_telefono: Mapped[str | None] = mapped_column(String, nullable=True)
     telefono_prestador_2: Mapped[str | None] = mapped_column(String, nullable=True)
+    llego_a_tiempo: Mapped[str | None] = mapped_column(String, nullable=True)
