@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db_session
 from app.core.config import Settings, get_settings
 from app.schemas.common import HealthResponse
+from app.schemas.logs_servicio import LogsServicioRead
 
 router = APIRouter()
 
@@ -26,4 +27,6 @@ def health_check(
         version=settings.app_version,
         database=db_status,
         control_cuentas_login_configured=settings.control_cuentas_login_enabled,
+        logs_servicios_llego_a_tiempo="llego_a_tiempo"
+        in LogsServicioRead.model_fields,
     )
