@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import desc, func, nulls_last, select
+from sqlalchemy import desc, nulls_last, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db_session, require_leads_access
@@ -24,10 +24,7 @@ def list_leads_narela(
 ) -> LeadNarelaListResponse:
     rows = db.scalars(
         select(LeadNarela)
-        .where(
-            LeadNarela.situacion.isnot(None),
-            func.length(func.trim(LeadNarela.situacion)) > 0,
-        )
+        .where(LeadNarela.estado.isnot(None))
         .order_by(nulls_last(desc(LeadNarela.creado_en)), desc(LeadNarela.id))
         .limit(limit)
     ).all()
