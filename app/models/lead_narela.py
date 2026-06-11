@@ -20,4 +20,5 @@ class LeadNarela(Base):
     email: Mapped[str | None] = mapped_column(String, nullable=True)
     situacion: Mapped[str | None] = mapped_column(String, nullable=True)
     estado: Mapped[str | None] = mapped_column(String, nullable=True)
+    mensaje_basura: Mapped[str | None] = mapped_column(String, nullable=True)
     creado_en: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

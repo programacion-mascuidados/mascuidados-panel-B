@@ -17,6 +17,7 @@ class LeadNarelaRead(BaseModel):
     email: str | None = None
     situacion: str | None = None
     estado: str | None = None
+    mensaje_basura: str | None = None
     creado_en: datetime | None = None
 
 
