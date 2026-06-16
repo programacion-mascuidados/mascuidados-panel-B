@@ -12,6 +12,7 @@ class ApifyLeadRead(BaseModel):
     ciudad: str | None = None
     ciudad_responsable: str | None = None
     nombre_responsable: str | None = None
+    email: str | None = None
     estado: str | None = None
     creado_en: datetime | None = None
 

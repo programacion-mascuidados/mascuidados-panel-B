@@ -15,6 +15,7 @@ class ApifyLead(Base):
     ciudad: Mapped[str | None] = mapped_column(String, nullable=True)
     ciudad_responsable: Mapped[str | None] = mapped_column(String, nullable=True)
     nombre_responsable: Mapped[str | None] = mapped_column(String, nullable=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=True)
     estado: Mapped[str | None] = mapped_column(String, nullable=True)
     creado_en: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     flujo: Mapped[str | None] = mapped_column(String, nullable=True)
