@@ -25,3 +25,10 @@ class LeadNarelaListResponse(BaseModel):
     items: list[LeadNarelaRead]
     limit: int = Field(description="Cantidad máxima de filas solicitadas")
     count: int = Field(description="Cantidad de filas devueltas en esta respuesta")
+
+
+class DismissMensajeBasuraRequest(BaseModel):
+    message_index: int = Field(
+        ge=0,
+        description="Índice del mensaje dentro de mensaje_basura (0-based)",
+    )
