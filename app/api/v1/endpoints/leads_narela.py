@@ -13,8 +13,8 @@ from app.utils.mensaje_basura import remove_mensaje_basura_at_index
 
 router = APIRouter(dependencies=[Depends(require_leads_access)])
 
-DEFAULT_LIMIT = 2000
-MAX_LIMIT = 2000
+DEFAULT_LIMIT = 500
+MAX_LIMIT = 500
 
 
 @router.get("", response_model=LeadNarelaListResponse)

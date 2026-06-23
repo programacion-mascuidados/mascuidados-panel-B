@@ -8,8 +8,8 @@ from app.schemas.apify_lead import ApifyLeadListResponse
 
 router = APIRouter(dependencies=[Depends(require_leads_access)])
 
-DEFAULT_LIMIT = 2000
-MAX_LIMIT = 2000
+DEFAULT_LIMIT = 500
+MAX_LIMIT = 500
 
 
 @router.get("", response_model=ApifyLeadListResponse)
@@ -18,7 +18,7 @@ def list_apify_leads(
         default=DEFAULT_LIMIT,
         ge=1,
         le=MAX_LIMIT,
-        description="Cantidad de registros a devolver (máximo 2000)",
+        description="Cantidad de registros a devolver (máximo 500)",
     ),
     db: Session = Depends(get_db_session),
 ) -> ApifyLeadListResponse:
