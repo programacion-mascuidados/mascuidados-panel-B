@@ -28,5 +28,8 @@ class LogsServicioRead(BaseModel):
 
 class LogsServicioListResponse(BaseModel):
     items: list[LogsServicioRead]
-    limit: int = Field(description="Cantidad máxima de filas solicitadas")
+    limit: int = Field(description="Cantidad máxima de filas solicitadas en esta respuesta")
     count: int = Field(description="Cantidad de filas devueltas en esta respuesta")
+    total: int = Field(description="Total de filas que coinciden con los filtros")
+    page: int = Field(description="Página actual (1-based)")
+    page_size: int = Field(description="Tamaño de página usado en esta respuesta")
