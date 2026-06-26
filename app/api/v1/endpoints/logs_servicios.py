@@ -7,6 +7,11 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db_session, require_auth
 from app.models.logs_servicio import LogsServicio
 from app.schemas.logs_servicio import LogsServicioListResponse
+from app.utils.logs_servicio_filters import (
+    apply_estado_filter,
+    apply_llegada_filter,
+    apply_sucursal_filter,
+)
 
 router = APIRouter(dependencies=[Depends(require_auth)])
 
@@ -26,6 +31,9 @@ def _apply_list_filters(
     nombre_prestador: str | None,
     fecha_desde: date | None,
     fecha_hasta: date | None,
+    sucursal: str | None = None,
+    estado: str | None = None,
+    llegada: str | None = None,
 ):
     if nombre_prestador is not None:
         term = nombre_prestador.strip()
@@ -37,6 +45,10 @@ def _apply_list_filters(
 
     if fecha_hasta is not None:
         query = query.where(LogsServicio.fec_ini <= fecha_hasta)
+
+    query = apply_sucursal_filter(query, sucursal)
+    query = apply_estado_filter(query, estado)
+    query = apply_llegada_filter(query, llegada)
 
     return query
 
@@ -62,6 +74,18 @@ def list_logs_servicios(
     fecha_hasta: date | None = Query(
         default=None,
         description="Fecha de turno (fec_ini) hasta, inclusive",
+    ),
+    sucursal: str | None = Query(
+        default=None,
+        description="Código de sucursal (ROS, PAR, CBA, BAS, SFE)",
+    ),
+    estado: str | None = Query(
+        default=None,
+        description="Estado del servicio (confirmado, cancelado, pendiente, etc.)",
+    ),
+    llegada: str | None = Query(
+        default=None,
+        description="Categoría de hora de llegada",
     ),
     page: int = Query(
         default=1,
@@ -93,12 +117,18 @@ def list_logs_servicios(
             nombre_prestador=prestador_term,
             fecha_desde=fecha_desde,
             fecha_hasta=fecha_hasta,
+            sucursal=sucursal,
+            estado=estado,
+            llegada=llegada,
         )
         count_query = _apply_list_filters(
             select(func.count()).select_from(LogsServicio),
             nombre_prestador=prestador_term,
             fecha_desde=fecha_desde,
             fecha_hasta=fecha_hasta,
+            sucursal=sucursal,
+            estado=estado,
+            llegada=llegada,
         )
 
         total = db.scalar(count_query) or 0
